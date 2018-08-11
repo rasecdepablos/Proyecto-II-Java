@@ -7,8 +7,11 @@ package principal;
 class Factura {
 
     private int cedula;
-    
-    public Factura() {
+    private int cantidad;
+
+    public Factura(int cedula, int cantidad) {
+        this.cedula = cedula;
+        this.cantidad = cantidad;
     }
     
 }

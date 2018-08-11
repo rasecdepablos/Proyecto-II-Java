@@ -9,6 +9,9 @@ public abstract class Productos {
     private double kilos;
     private double litros;
     
+    private int cedula;
+    private int cantidadVendidos;
+    
     public Productos(String codigo, String descripcion, char tipo) {
         this.codigo = codigo;
         this.descripcion = descripcion;
