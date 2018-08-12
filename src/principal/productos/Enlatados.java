@@ -9,8 +9,8 @@ public class Enlatados extends Productos {
     private int cedula;
     private int cantidadVendida;
 
-    public Enlatados(String codigo, String descripcion, char tipo) {
-        super(codigo,descripcion,tipo);
+    public Enlatados(String codigo, String descripcion, double precio, char tipo) {
+        super(codigo,descripcion,precio,tipo);
     }
     
     public void Mostrar(){

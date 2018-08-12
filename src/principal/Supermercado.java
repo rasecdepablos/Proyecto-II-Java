@@ -13,11 +13,20 @@ public class Supermercado{
     private Factura[] factura =  new Factura[1200];
     
     private int numero = 0;
+    private int posicionVenta = 0;
+    
+    private int cantidadE = 0;
+    private int cantidadL = 0;
+    private int cantidadC = 0;
+    private int cantidadV = 0;
     
     private String codigo;
     private String descripcion;
     
+    private double precio;
+    
     private char tipoProducto;
+
     
     public void Menu(){
         System.out.println("--Supermercado La Popular--");
@@ -76,10 +85,12 @@ public class Supermercado{
                 
                 IngresarCodigo();
                 IngresarDescripcion();
+                IngresarPrecio();
                 
-                productos[numero] = new Enlatados(codigo,descripcion, 'E');
+                productos[numero] = new Enlatados(codigo, descripcion, precio, 'E');
                 
                 numero += 1;
+                cantidadE += 1 ;
                 System.out.println("Agregado exitosamente!");
                 Menu();
                 break;    
@@ -88,15 +99,17 @@ public class Supermercado{
 
                 IngresarCodigo();
                 IngresarDescripcion();
+                IngresarPrecio();
                 
                 System.out.println("Ingrese los Kg del producto (Si los posee): ");
                 kilos = in.nextDouble();
                 System.out.println("Ingrese los litros del producto (Si los posee): ");
                 litros = in.nextDouble();
                 
-                productos[numero] = new Lacteos(codigo, descripcion, kilos, litros, 'L');
+                productos[numero] = new Lacteos(codigo, descripcion, kilos, litros, precio, 'L');
                 
                 numero += 1;
+                cantidadL += 1;
                 System.out.println("Agregado exitosamente!");
                 Menu();
                 break;                
@@ -105,13 +118,16 @@ public class Supermercado{
                 
                 IngresarCodigo();
                 IngresarDescripcion();
+                IngresarPrecio();
                 
                 System.out.println("Ingrese los Kg del producto: ");
                 kilos = in.nextDouble();
                 
-                productos[numero] = new Carnes(codigo, descripcion, kilos, 'C');
+                productos[numero] = new Carnes(codigo, descripcion, kilos, precio, 'C');
                 
                 numero += 1;
+                cantidadC += 1;
+                
                 System.out.println("Agregado exitosamente!");
                 Menu();
                 break;                
@@ -120,10 +136,13 @@ public class Supermercado{
                 
                 IngresarCodigo();
                 IngresarDescripcion();
+                IngresarPrecio();
                 
-                productos[numero] = new Viveres(codigo, descripcion, 'V');
+                productos[numero] = new Viveres(codigo, descripcion, precio, 'V');
                 
                 numero += 1;
+                cantidadV += 1;
+                
                 System.out.println("Agregado exitosamente!");
                 Menu();
                 break;                 
@@ -150,6 +169,13 @@ public class Supermercado{
     return descripcion;
     }
     
+    private double IngresarPrecio(){
+        System.out.println("Ingrese el precio del Producto: ");
+        precio = in.nextDouble();
+        
+        return precio;
+    }
+    
     public void ExistenciaProducto() {
         
         String codigobus;
@@ -158,6 +184,7 @@ public class Supermercado{
         
         double kg;
         double l;
+        double precioP;
         
         if(numero == 0){
             System.out.println("No hay Productos");
@@ -179,24 +206,64 @@ public class Supermercado{
                 
                 kg = productos[i].getKilos();
                 l = productos[i].getLitros();
+                precioP = productos[i].getPrecio();
+                
                 
                 System.out.println("Producto Encontrado!");
-                ModificarProducto(code, descripcion2, kg, l);
+                ModificarProducto(code, descripcion2, kg, l, precioP);
                 break;
             }
             
             i++;
         }
-        //mirar();
         Menu();
     } 
 
     public void FacturarVenta() {
-        IngresarCodigo();
-  
+        
+        int cantidadVendida;
+        int cedula;
+        
+        double precioVentasTotal = 0;
+        
+        String codigobus;
+        
+        System.out.println("Ingrese la cedula: ");
+        cedula = in.nextInt();        
+        
+        System.out.println("Ingrese el codigo del producto: ");
+        codigobus = in.next();
+        
+        System.out.println("Ingrese la cantidad vendida: ");
+        cantidadVendida = in.nextInt();
+        
+        if(cantidadVendida > numero){
+            System.out.println("Cantidad no valida porque supera la existencia");
+            Menu();
+        }else{
+            
+            for(int x = 0; x < cantidadVendida; x++){
+                if(productos[x].getCodigo().equalsIgnoreCase(codigobus)){
+                    
+                    precioVentasTotal += productos[x].getPrecio();
+                    
+                    for(int y = x; y < productos.length - 1; y++){
+                        productos[y] = productos[y + 1];
+                    }
+                    productos[productos.length - 1] = null;
+                    numero -= 1;
+                }    
+            }
+            
+            factura[posicionVenta] = new Factura(cantidadVendida, cedula, precioVentasTotal);
+            posicionVenta += 1;
+        }
+        
+        System.out.println("TOTAL: " + precioVentasTotal);
+        Menu();   
     }
 
-    private void ModificarProducto(final String cod, final String des, final double k, final double l) {
+    private void ModificarProducto(final String cod, final String des, final double k, final double l, double precio) {
         
         int cantidad = 0;
         System.out.println("Ingrese la Cantidad Que Desea Agregar: ");
@@ -205,37 +272,40 @@ public class Supermercado{
         if(tipoProducto == 'E'){
             
             for(int i = 0; i < cantidad; i++){
-                productos[numero] = new Enlatados(cod, des,'E');
+                productos[numero] = new Enlatados(cod, des, precio,'E');
                 
                 numero += 1;
+                cantidadE += 1;
             }
         }
         
         if(tipoProducto == 'L'){
             
             for(int i = 0; i < cantidad; i++){
-                productos[numero] = new Lacteos(cod, des, k, l, 'L');
+                productos[numero] = new Lacteos(cod, des, k, l, precio, 'L');
                 
                 numero += 1;
+                cantidadL += 1;
             }
         }
 
         if(tipoProducto == 'C'){
             
             for(int i = 0; i < cantidad; i++){
-                productos[numero] = new Carnes(cod, des, k, 'C');
+                productos[numero] = new Carnes(cod, des, k, precio, 'C');
                 
                 numero += 1;
+                cantidadC += 1;
             }
         }
         
         if(tipoProducto == 'V'){
             
             for(int i = 0; i < cantidad; i++){
-                productos[numero] = new Viveres(cod, des, 'V');
-                
-      
+                productos[numero] = new Viveres(cod, des, precio, 'V');
+               
                 numero += 1;
+                cantidadV += 1;
             }
         }          
         
@@ -249,11 +319,31 @@ public class Supermercado{
     }
 
     private void IngresosBrutos() {
-    
+        double total = 0;
+       
+        for(int x = 0; x < posicionVenta; x++){
+            total += factura[x].getPrecio();
+        }
+        
+        System.out.println("Ingresos Brutos: " + total);
+       
+        Menu();
     }
 
     private void EgresosEmpresa() {
-    
+        double egresos = 0;
+        
+        if(numero == 0){
+           System.out.println("No has ingresado productos!"); 
+        }else{
+            
+            for(int x = 0; x < numero; x++){
+                egresos += productos[x].getPrecio();
+            }
+            
+            System.out.println("Egresos en productos : " + egresos + " Cantidad de productos: " + numero);
+        }
+        Menu();           
     }
 
     private void ReporteMayoresVentas() {
@@ -261,7 +351,18 @@ public class Supermercado{
     }
 
     private void EnExistencia() {
-    
-    }
-    
+        if(cantidadE < 10){
+            System.out.println("Hay menos de 10 productos de tipo Enlatados");
+        }
+        if(cantidadC < 10){
+            System.out.println("Hay menos de 10 productos de tipo Carnicos");
+        }
+        if(cantidadL < 10){
+            System.out.println("Hay menos de 10 productos de tipo Lacteos");
+        }
+        if(cantidadV < 10){
+            System.out.println("Hay menos de 10 productos de tipo Viveres");
+        }
+        Menu();
+    }    
 }

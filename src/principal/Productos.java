@@ -8,14 +8,16 @@ public abstract class Productos {
     
     private double kilos;
     private double litros;
+    private double precio;
     
     private int cedula;
     private int cantidadVendidos;
     
-    public Productos(String codigo, String descripcion, char tipo) {
+    public Productos(String codigo, String descripcion, double precio, char tipo) {
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.tipoProducto = tipo;
+        this.precio = precio;
         
         this.kilos = kilos;
         this.litros = litros;
@@ -43,6 +45,10 @@ public abstract class Productos {
 
     public double getLitros() {
         return litros;
+    }
+
+    public double getPrecio() {
+        return precio;
     }
     
 }

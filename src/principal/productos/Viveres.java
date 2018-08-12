@@ -18,9 +18,9 @@ public class Viveres extends Productos{
     private String codigo;
     private String descripcion;*/
     
-    public Viveres(String codigo, String descripcion, char tipo) {
+    public Viveres(String codigo, String descripcion, double precio, char tipo) {
         
-        super(codigo, descripcion, tipo);
+        super(codigo, descripcion, precio, tipo);
         //this.codigo = codigo;
         //this.descripcion = descripcion;
     }

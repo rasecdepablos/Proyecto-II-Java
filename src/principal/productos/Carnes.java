@@ -10,8 +10,8 @@ public class Carnes extends Productos{
 
     private double kilos;
      
-    public Carnes(String codigo, String descripcion, double kilos, char tipo) {
-        super(codigo,descripcion,tipo);
+    public Carnes(String codigo, String descripcion, double kilos, double precio, char tipo) {
+        super(codigo,descripcion,precio,tipo);
         
         this.kilos = kilos;
     }

@@ -17,8 +17,8 @@ public class Lacteos extends Productos{
     private double litros;
     private boolean solido;
     
-    public Lacteos(String codigo, String descripcion, double kilos, double litros, char tipo) {
-        super(codigo, descripcion, tipo);
+    public Lacteos(String codigo, String descripcion, double kilos, double litros, double precio, char tipo) {
+        super(codigo, descripcion, precio, tipo);
 
         this.kilos = kilos;
         this.litros = litros;
